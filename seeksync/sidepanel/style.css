@@ -1,0 +1,112 @@
+/* Elements */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  --navy: #14335d;
+  --aqua: #73eaef;
+  --dark-primary: #212121;
+  --dark-secondary: #424242;
+  --light-primary: #e3e3e3;
+  --light-secondary: #b4b4b4;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background-color: var(--dark-primary);
+  color: var(--light-primary);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  padding: 1em;
+  color: var(--light-secondary);
+  border-radius: 1em;
+  margin-right: 1em;
+  width: 5rem;
+  background-color: var(--dark-secondary);
+}
+
+input,
+textarea {
+  width: 100%;
+  border: none;
+  padding: 1em;
+  border-radius: 1em;
+  background-color: var(--dark-secondary);
+  color: var(--light-primary);
+  font-family: system-ui, sans-serif;
+}
+
+textarea {
+  resize: none;
+}
+
+button {
+  padding: 1em;
+  border: none;
+  border-radius: 1em;
+  background-color: var(--aqua);
+  color: var(--dark-primary);
+  cursor: pointer;
+  min-width: 5rem;
+}
+
+/* Classes */
+
+.hidden {
+  display: none;
+}
+
+.input-group {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1em;
+  align-items: stretch;
+}
+
+/* IDs */
+
+#chatPanel {
+  /* height: 100%; */
+  display: flex;
+  flex-flow: column;
+  flex-grow: 1;
+}
+
+#chatHistory {
+  border: none;
+  background-color: var(--dark-secondary);
+  border-radius: 1em;
+  padding: 1em;
+  overflow-y: auto;
+  margin-bottom: 1em;
+  flex-grow: 1;
+  /* width: 100%; */
+}
+
+#settingsToggle {
+  cursor: pointer;
+  font-size: 3em;
+  vertical-align: middle;
+  color: var(--aqua);
+}
+
+#titlePanel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

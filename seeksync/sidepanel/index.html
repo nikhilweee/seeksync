@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SeekSync Settings</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div id="titlePanel">
+      <h2>SeekSync</h2>
+      <span id="settingsToggle">&#9881;</span>
+    </div>
+
+    <div id="settingsPanel" class="">
+      <form id="settingsForm">
+        <div class="input-group">
+          <label for="servername">Server</label>
+          <input type="text" id="servername" name="servername" />
+        </div>
+        <div class="input-group">
+          <label for="roomname">Room</label>
+          <input type="text" id="roomname" name="roomname" />
+        </div>
+        <div class="input-group">
+          <label for="username">User</label>
+          <input type="text" id="username" name="username" />
+        </div>
+        <div class="input-group">
+          <span></span>
+          <button type="submit" id="connect">Connect</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="chatPanel">
+      <div id="chatHistory"></div>
+      <textarea id="message" placeholder="Message (Enter to Send)"></textarea>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "SeekSync",
+  "version": "0.1",
+  "description": "Watch Videos in Sync",
+  "icons": {
+    "512": "images/icon-512.png"
+  },
+  "background": {
+    "service_worker": "service-worker.js",
+    "type": "module"
+  },
+  "side_panel": {
+    "default_path": "sidepanel/index.html"
+  },
+  "permissions": ["storage", "sidePanel", "activeTab"],
+  "content_scripts": [
+    {
+      "matches": ["https://www.netflix.com/*"],
+      "js": ["scripts/netflix/content.js"],
+      "world": "ISOLATED"
+    },
+    {
+      "matches": ["https://www.netflix.com/*"],
+      "js": ["scripts/netflix/inject.js"],
+      "world": "MAIN"
+    }
+  ]
+}
