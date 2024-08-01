@@ -29,6 +29,11 @@ body {
   padding: 1em;
 }
 
+h2 {
+  flex-grow: 1;
+  margin-left: 0.5em;
+}
+
 label {
   display: flex;
   align-items: center;
@@ -49,10 +54,12 @@ textarea {
   background-color: var(--dark-secondary);
   color: var(--light-primary);
   font-family: system-ui, sans-serif;
+  outline: none;
 }
 
 textarea {
   resize: none;
+  flex-shrink: 0;
 }
 
 button {
@@ -78,13 +85,30 @@ button {
   align-items: stretch;
 }
 
+.button-group {
+  display: flex;
+  justify-content: end;
+  margin-bottom: 1em;
+  gap: 0.5em;
+}
+
+div.message {
+  display: flex;
+  justify-content: space-between;
+}
+
+div.message-ts {
+  flex-shrink: 0;
+}
+
 /* IDs */
 
 #chatPanel {
-  /* height: 100%; */
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   flex-grow: 1;
+  overflow: hidden;
+  word-break: break-all;
 }
 
 #chatHistory {
@@ -92,10 +116,9 @@ button {
   background-color: var(--dark-secondary);
   border-radius: 1em;
   padding: 1em;
-  overflow-y: auto;
   margin-bottom: 1em;
+  overflow-y: auto;
   flex-grow: 1;
-  /* width: 100%; */
 }
 
 #settingsToggle {
@@ -103,6 +126,7 @@ button {
   font-size: 3em;
   vertical-align: middle;
   color: var(--aqua);
+  margin: 0 0.2em;
 }
 
 #titlePanel {

@@ -13,7 +13,7 @@
       <span id="settingsToggle">&#9881;</span>
     </div>
 
-    <div id="settingsPanel" class="">
+    <div id="settingsPanel" class="hidden">
       <form id="settingsForm">
         <div class="input-group">
           <label for="servername">Server</label>
@@ -27,16 +27,19 @@
           <label for="username">User</label>
           <input type="text" id="username" name="username" />
         </div>
-        <div class="input-group">
-          <span></span>
-          <button type="submit" id="connect">Connect</button>
+        <div class="button-group">
+          <button type="submit" name="clear" id="clear">Clear History</button>
+          <button type="submit" name="connect" id="connect">Connect</button>
         </div>
       </form>
     </div>
 
     <div id="chatPanel">
       <div id="chatHistory"></div>
-      <textarea id="message" placeholder="Message (Enter to Send)"></textarea>
+      <textarea
+        id="messageInput"
+        placeholder="Message (Enter to Send)"
+      ></textarea>
     </div>
 
     <script src="script.js"></script>

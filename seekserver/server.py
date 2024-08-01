@@ -1,6 +1,7 @@
 import websockets
 import asyncio
 import json
+import time
 
 
 class User:
@@ -85,6 +86,7 @@ class Server:
             "type": "chat",
             "sender": "system",
             "text": username + " left the room",
+            "ts": time.time(),
         }
 
         self.connections.pop(websocket)
@@ -159,6 +161,7 @@ class Server:
             "type": "chat",
             "sender": "system",
             "text": text,
+            "ts": time.time(),
         }
 
         self.broadcast_json(message_dict, filtered_users)
@@ -174,6 +177,7 @@ class Server:
             "type": "chat",
             "sender": "system",
             "text": message["username"] + " entered the room",
+            "ts": time.time(),
         }
 
         self.broadcast_json(message, filtered_users)

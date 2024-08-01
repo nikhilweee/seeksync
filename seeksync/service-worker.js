@@ -22,7 +22,7 @@ function keepAlive() {
   );
 }
 
-function handleConnect(message) {
+function handleConnect() {
   // Close existing connection
   if (ws) {
     ws.close();
@@ -37,7 +37,8 @@ function handleConnect(message) {
       chrome.runtime.sendMessage({
         type: "chat",
         sender: "system",
-        text: `Connected to ${url}`,
+        text: `Connected to ${storage.servername}`,
+        ts: Date.now() / 1000,
       });
       keepAlive();
     };
@@ -46,6 +47,7 @@ function handleConnect(message) {
         type: "chat",
         sender: "system",
         text: `Error connecting to ${url}`,
+        ts: Date.now() / 1000,
       });
     };
     ws.onclose = (event) => {
@@ -53,6 +55,7 @@ function handleConnect(message) {
         type: "chat",
         sender: "system",
         text: `Disconnected from ${url}`,
+        ts: Date.now() / 1000,
       });
     };
     // Need to refine this further
@@ -89,6 +92,7 @@ function websocketSend(message) {
       type: "chat",
       sender: "system",
       text: "Error: Not connected to server",
+      ts: Date.now() / 1000,
     });
   }
 }
@@ -98,7 +102,13 @@ chrome.runtime.onMessage.addListener((message) => {
   if (message.type === "control") {
     if (message.action === "connect") {
       // received when user clicks connect button
-      handleConnect(message);
+      handleConnect();
+    }
+    if (message.action === "ensureconnect") {
+      // received when user opens side panel
+      if (!ws) {
+        handleConnect();
+      }
     }
     if (message.action === "play" || message.action === "pause") {
       // received when user plays or pauses video
