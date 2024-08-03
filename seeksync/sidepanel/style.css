@@ -29,6 +29,10 @@ body {
   padding: 1em;
 }
 
+a {
+  color: var(--aqua);
+}
+
 h2 {
   flex-grow: 1;
   margin-left: 0.5em;
@@ -37,7 +41,7 @@ h2 {
 label {
   display: flex;
   align-items: center;
-  padding: 1em;
+  padding: 0.5em 1em;
   color: var(--light-secondary);
   border-radius: 1em;
   margin-right: 1em;
@@ -49,7 +53,7 @@ input,
 textarea {
   width: 100%;
   border: none;
-  padding: 1em;
+  padding: 0.5em 1em;
   border-radius: 1em;
   background-color: var(--dark-secondary);
   color: var(--light-primary);
@@ -59,6 +63,7 @@ textarea {
 
 textarea {
   resize: none;
+  height: 5em;
   flex-shrink: 0;
 }
 
@@ -69,7 +74,8 @@ button {
   background-color: var(--aqua);
   color: var(--dark-primary);
   cursor: pointer;
-  min-width: 5rem;
+  padding: 0.5em 1em;
+  min-width: 6rem;
 }
 
 /* Classes */
@@ -123,8 +129,8 @@ div.message-ts {
 
 #settingsToggle {
   cursor: pointer;
-  font-size: 3em;
-  vertical-align: middle;
+  font-size: 4em;
+  align-self: baseline;
   color: var(--aqua);
   margin: 0 0.2em;
 }
@@ -133,4 +139,37 @@ div.message-ts {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+/* Toggle */
+
+.toggle {
+  align-self: baseline;
+  appearance: none;
+  box-sizing: content-box;
+  margin: 0.5em;
+  width: 3em;
+  height: 1.5em;
+  padding: 0.2em;
+  cursor: pointer;
+  border-radius: 1.5em;
+  transition: background-color ease 0.1s;
+}
+
+.toggle:before {
+  content: "";
+  display: block;
+  width: 1.5em;
+  height: 1.5em;
+  background: #fff;
+  border-radius: 1.5em;
+  transition: transform ease-in-out 0.1s;
+}
+
+.toggle:checked {
+  background-color: var(--aqua);
+}
+
+.toggle:checked:before {
+  transform: translateX(1.5em);
 }

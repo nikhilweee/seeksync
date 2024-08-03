@@ -4,7 +4,12 @@
   "version": "0.1",
   "description": "Watch Videos in Sync",
   "icons": {
-    "512": "images/icon-512.png"
+    "512": "images/icon-blue-512.png"
+  },
+  "action": {
+    "default_icon": {
+      "128": "images/icon-gray-128.png"
+    }
   },
   "background": {
     "service_worker": "service-worker.js",

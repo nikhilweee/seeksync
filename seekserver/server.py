@@ -42,8 +42,8 @@ class Server:
         return self.rooms[roomname]
 
     def broadcast_json(self, message: dict, users: list):
-        for user in users:
-            print("sent", user.username, message)
+        usernames = " ".join([user.username for user in users])
+        print("sent", usernames, message)
         connections = [user.websocket for user in users]
         message = json.dumps(message)
         websockets.broadcast(connections, message)
@@ -115,16 +115,31 @@ class Server:
 
         # Reject reaction messages in response to control message
 
-        if (
-            room.state.get("action") == message["action"]
-            # and abs(room.state.get("time") - message["time"]) < 10
-        ):
+        if room.state.get("action") == message["action"]:
             return
 
         # Update current room state
+
         room.state["action"] = message["action"]
         room.state["time"] = message["time"]
-        room.state["url"] = message["url"]
+
+        if message["url"] != room.state.get("url"):
+            room.state["url"] = message["url"]
+
+            url = message["url"]
+            title = message["title"]
+            link = f"<a href='{url}' target='_blank'>{title}</a>"
+
+            text = message["username"] + " is watching " + link
+
+            message_dict = {
+                "type": "chat",
+                "sender": "system",
+                "text": text,
+                "ts": time.time(),
+            }
+
+            self.broadcast_json(message_dict, all_users)
 
         # Broadcast control message to other users
 
@@ -173,14 +188,14 @@ class Server:
 
         filtered_users = all_users
 
-        message = {
+        message_dict = {
             "type": "chat",
             "sender": "system",
             "text": message["username"] + " entered the room",
             "ts": time.time(),
         }
 
-        self.broadcast_json(message, filtered_users)
+        self.broadcast_json(message_dict, filtered_users)
 
 
 server = Server()

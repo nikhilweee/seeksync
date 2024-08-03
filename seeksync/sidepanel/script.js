@@ -1,16 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
   const inputNames = ["servername", "roomname", "username"];
+  const connection = document.getElementById("connectionToggle");
   let chatMessages = [];
 
-  // Load saved values from storage and populate inputs
-  chrome.storage.local.get(inputNames).then((storage) => {
-    inputNames.forEach((name) => {
-      const input = document.getElementById(name);
-      if (storage[name]) {
-        input.value = storage[name];
-      }
-    });
-  });
+  /**
+   * Utilities
+   */
 
   // Format and display message on the chat panel
   function showMessage(message) {
@@ -42,39 +37,36 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Listen for messages from the rest of the extension
-  chrome.runtime.onMessage.addListener((message) => {
-    console.log("sidepanel onmessage", message);
-    showMessage(message);
-    chatMessages.push(message);
-    chrome.storage.session.set({ chatMessages: chatMessages });
-  });
+  /**
+   * UI Handlers
+   */
 
-  // Form submit handler
+  // Connection button handler
   document
-    .getElementById("settingsForm")
-    .addEventListener("submit", (event) => {
-      event.preventDefault();
+    .getElementById("connectionToggle")
+    .addEventListener("click", (event) => {
+      // event.preventDefault();
       // Connect button handler
-      if (event.submitter.name === "connect") {
-        const settings = {};
-        inputNames.forEach((name) => {
-          settings[name] = document.getElementById(name).value.trim();
+      const settings = {};
+      inputNames.forEach((name) => {
+        settings[name] = document.getElementById(name).value.trim();
+      });
+      chrome.storage.local.set(settings).then(() => {
+        chrome.runtime.sendMessage({
+          type: "control",
+          action: "toggleconnect",
         });
-        chrome.storage.local.set(settings).then(() => {
-          chrome.runtime.sendMessage({
-            type: "control",
-            action: "connect",
-          });
-        });
-      }
-      // Clear button handler
-      if (event.submitter.name === "clear") {
-        chatMessages = [];
-        document.getElementById("chatHistory").innerHTML = "";
-        chrome.storage.session.set({ chatMessages: [] });
-      }
+      });
     });
+
+  // Clear button submit handler
+  document.getElementById("clearButton").addEventListener("click", (event) => {
+    event.preventDefault();
+    // Clear button handler
+    chatMessages = [];
+    document.getElementById("chatHistory").innerHTML = "";
+    chrome.storage.session.set({ chatMessages: [] });
+  });
 
   // Chat message handler
   document
@@ -104,6 +96,20 @@ document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("settingsPanel").classList.toggle("hidden");
     });
 
+  /**
+   * One time actions
+   */
+
+  // Load saved values from storage and populate inputs on first load
+  chrome.storage.local.get(inputNames).then((storage) => {
+    inputNames.forEach((name) => {
+      const input = document.getElementById(name);
+      if (storage[name]) {
+        input.value = storage[name];
+      }
+    });
+  });
+
   // Restore messages from session storage on first load
   chrome.storage.session.get({ chatMessages: [] }).then((storage) => {
     chatMessages = storage.chatMessages;
@@ -112,9 +118,33 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
+  // Restore connection status from session storage on first load
+  chrome.storage.session.get({ connected: false }).then((storage) => {
+    connection.textContent = storage.connected;
+  });
+
   // Ensure connection is established on first load
   chrome.runtime.sendMessage({
     type: "control",
     action: "ensureconnect",
+  });
+
+  /**
+   * Chrome Listeners
+   */
+
+  // Listen for messages from the rest of the extension
+  chrome.runtime.onMessage.addListener((message) => {
+    console.log("sidepanel onmessage", message);
+    showMessage(message);
+    chatMessages.push(message);
+    chrome.storage.session.set({ chatMessages: chatMessages });
+  });
+
+  // Listen for change in connected status
+  chrome.storage.session.onChanged.addListener((changes) => {
+    if (changes.connected) {
+      connection.checked = changes.connected.newValue;
+    }
   });
 });

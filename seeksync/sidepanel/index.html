@@ -10,28 +10,37 @@
   <body>
     <div id="titlePanel">
       <h2>SeekSync</h2>
+      <!-- <button type="submit" name="connectionToggle" id="connectionToggle">
+        Connect
+      </button> -->
+      <!-- <label for="connectionToggle">Connect</label> -->
+      <input
+        class="toggle"
+        name="connectionToggle"
+        id="connectionToggle"
+        type="checkbox"
+      />
       <span id="settingsToggle">&#9881;</span>
     </div>
 
     <div id="settingsPanel" class="hidden">
-      <form id="settingsForm">
-        <div class="input-group">
-          <label for="servername">Server</label>
-          <input type="text" id="servername" name="servername" />
-        </div>
-        <div class="input-group">
-          <label for="roomname">Room</label>
-          <input type="text" id="roomname" name="roomname" />
-        </div>
-        <div class="input-group">
-          <label for="username">User</label>
-          <input type="text" id="username" name="username" />
-        </div>
-        <div class="button-group">
-          <button type="submit" name="clear" id="clear">Clear History</button>
-          <button type="submit" name="connect" id="connect">Connect</button>
-        </div>
-      </form>
+      <div class="input-group">
+        <label for="servername">Server</label>
+        <input type="text" id="servername" name="servername" />
+      </div>
+      <div class="input-group">
+        <label for="roomname">Room</label>
+        <input type="text" id="roomname" name="roomname" />
+      </div>
+      <div class="input-group">
+        <label for="username">User</label>
+        <input type="text" id="username" name="username" />
+      </div>
+      <div class="button-group">
+        <button type="submit" name="clearButton" id="clearButton">
+          Clear History
+        </button>
+      </div>
     </div>
 
     <div id="chatPanel">

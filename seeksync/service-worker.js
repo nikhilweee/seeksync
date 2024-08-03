@@ -2,6 +2,7 @@
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
 
 let ws = null;
+let chatMessages = [];
 let keepAliveIntervalId = null;
 
 function keepAlive() {
@@ -23,11 +24,6 @@ function keepAlive() {
 }
 
 function handleConnect() {
-  // Close existing connection
-  if (ws) {
-    ws.close();
-    ws = null;
-  }
   // Open a new connection
   chrome.storage.local.get("servername").then((storage) => {
     const url = `ws://${storage.servername}`;
@@ -41,6 +37,8 @@ function handleConnect() {
         ts: Date.now() / 1000,
       });
       keepAlive();
+      chrome.action.setIcon({ path: "images/icon-green-128.png" });
+      chrome.storage.session.set({ connected: true });
     };
     ws.onerror = (event) => {
       chrome.runtime.sendMessage({
@@ -54,9 +52,11 @@ function handleConnect() {
       chrome.runtime.sendMessage({
         type: "chat",
         sender: "system",
-        text: `Disconnected from ${url}`,
+        text: `Disconnected from ${storage.servername}`,
         ts: Date.now() / 1000,
       });
+      chrome.action.setIcon({ path: "images/icon-gray-128.png" });
+      chrome.storage.session.set({ connected: false });
     };
     // Need to refine this further
     ws.onmessage = (event) => {
@@ -75,6 +75,8 @@ function websocketReceive(event) {
         chrome.tabs.sendMessage(tab.id, message);
       });
   } else {
+    chatMessages.push(message);
+    chrome.storage.session.set({ chatMessages: chatMessages });
     chrome.runtime.sendMessage(message);
   }
 }
@@ -100,13 +102,18 @@ function websocketSend(message) {
 chrome.runtime.onMessage.addListener((message) => {
   console.log("service worker onmessage", message);
   if (message.type === "control") {
-    if (message.action === "connect") {
-      // received when user clicks connect button
-      handleConnect();
+    if (message.action === "toggleconnect") {
+      // received when user clicks connection toggle button
+      if (ws) {
+        ws.close();
+        ws = null;
+      } else {
+        handleConnect();
+      }
     }
     if (message.action === "ensureconnect") {
       // received when user opens side panel
-      if (!ws) {
+      if (!ws || ws.readyState !== WebSocket.OPEN) {
         handleConnect();
       }
     }
