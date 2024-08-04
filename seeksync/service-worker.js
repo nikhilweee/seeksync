@@ -57,6 +57,7 @@ function handleConnect() {
       });
       chrome.action.setIcon({ path: "images/icon-gray-128.png" });
       chrome.storage.session.set({ connected: false });
+      ws = null;
     };
     // Need to refine this further
     ws.onmessage = (event) => {
@@ -106,7 +107,6 @@ chrome.runtime.onMessage.addListener((message) => {
       // received when user clicks connection toggle button
       if (ws) {
         ws.close();
-        ws = null;
       } else {
         handleConnect();
       }

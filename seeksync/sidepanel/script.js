@@ -9,32 +9,31 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Format and display message on the chat panel
   function showMessage(message) {
-    if (message.type === "chat") {
-      const chatHistory = document.getElementById("chatHistory");
-      const update = document.createElement("div");
-      update.classList.add("message");
-      if (message.sender === "user") {
-        update.innerHTML = `
+    const chatHistory = document.getElementById("chatHistory");
+    const update = document.createElement("div");
+    if (message.sender === "user") {
+      update.classList.add("user-message");
+      update.innerHTML = `
         <div class="message-text">
           <strong>${message.username}</strong>: ${message.text}
         </div>`;
-      }
-      if (message.sender === "system") {
-        update.innerHTML = `
+    }
+    if (message.sender === "system") {
+      update.classList.add("system-message");
+      update.innerHTML = `
         <div class="message-text">
           <em>${message.text}</em>
         </div>`;
-      }
-      const date = new Date(message.ts * 1000).toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false,
-      });
-      update.innerHTML += `<div class="message-ts">${date}</div>`;
-      chatHistory.appendChild(update);
-      // Scroll to the bottom
-      chatHistory.scrollTop = chatHistory.scrollHeight;
     }
+    const date = new Date(message.ts * 1000).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+    update.innerHTML += `<div class="message-ts">${date}</div>`;
+    chatHistory.appendChild(update);
+    // Scroll to the bottom
+    chatHistory.scrollTop = chatHistory.scrollHeight;
   }
 
   /**
@@ -135,10 +134,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Listen for messages from the rest of the extension
   chrome.runtime.onMessage.addListener((message) => {
-    console.log("sidepanel onmessage", message);
-    showMessage(message);
-    chatMessages.push(message);
-    chrome.storage.session.set({ chatMessages: chatMessages });
+    if (message.type === "chat") {
+      console.log("sidepanel onmessage chat", message);
+      showMessage(message);
+      chatMessages.push(message);
+      chrome.storage.session.set({ chatMessages: chatMessages });
+    }
   });
 
   // Listen for change in connected status

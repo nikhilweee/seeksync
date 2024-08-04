@@ -98,9 +98,22 @@ button {
   gap: 0.5em;
 }
 
-div.message {
+div.user-message {
+  background-color: var(--dark-primary);
+  padding: 0.1em 0.5em;
+  border-radius: 0.1em;
   display: flex;
   justify-content: space-between;
+}
+
+div.system-message {
+  padding: 0.1em 0.5em;
+  display: flex;
+  justify-content: space-between;
+}
+
+div.message-text {
+  margin-right: 0.1em;
 }
 
 div.message-ts {
@@ -121,7 +134,7 @@ div.message-ts {
   border: none;
   background-color: var(--dark-secondary);
   border-radius: 1em;
-  padding: 1em;
+  padding: 1em 0;
   margin-bottom: 1em;
   overflow-y: auto;
   flex-grow: 1;
@@ -132,7 +145,8 @@ div.message-ts {
   font-size: 4em;
   align-self: baseline;
   color: var(--aqua);
-  margin: 0 0.2em;
+  /* Manually centre this toggle */
+  margin: 0 0.2em 0.1em;
 }
 
 #titlePanel {
@@ -144,7 +158,6 @@ div.message-ts {
 /* Toggle */
 
 .toggle {
-  align-self: baseline;
   appearance: none;
   box-sizing: content-box;
   margin: 0.5em;

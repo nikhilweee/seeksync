@@ -33,23 +33,16 @@ function seekVideo(action, ms) {
 function register() {
   const videoPlayer = netflix.appContext.state.playerApp.getAPI().videoPlayer;
   const [playerSessionId] = videoPlayer.getAllPlayerSessionIds();
-
-  if (!playerSessionId.startsWith("watch")) {
-    console.log("SeekSync Inject: Waiting");
-    setTimeout(register, 100);
-    return;
-  }
-
   const player = videoPlayer.getVideoPlayerBySessionId(playerSessionId);
 
-  if (!player) {
+  if (!playerSessionId || !player || !playerSessionId.startsWith("watch")) {
     console.log("SeekSync Inject: Waiting");
     setTimeout(register, 100);
     return;
   }
 
   console.log("SeekSync Inject: Found");
-  let actions = ["playingchanged"];
+  let actions = ["loaded", "playingchanged"];
   actions.forEach((action) => {
     player.addEventListener(action, (event) => {
       {
@@ -87,4 +80,5 @@ window.navigation.addEventListener("navigate", (event) => {
   }
 });
 
-// register();
+/** Register on page reload */
+register();
