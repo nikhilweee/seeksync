@@ -24,9 +24,11 @@ Follow these steps to install the extension and setup the server.
 
 The server is a simple python script that can be run on any machine with a
 publicly reachable IP address. You can find this script as
-`seekserver/server.py`. An easy way is to host it on any cloud VM. The
-instructions assume that you are running the server on a linux machine with a
-public IP of `11.22.33.44`. A working installation of Python is required.
+`seekserver/server.py`. An easy way to run the server is to host it on any cloud
+VM provider.
+
+The instructions assume that you are running the server on a linux machine with
+a public IP of `11.22.33.44`. A working installation of Python is required.
 
 1. Create a virtual environment (optional)
 
