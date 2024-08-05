@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "SeekSync",
   "version": "0.1",
-  "description": "Watch Videos in Sync",
+  "description": "Watch videos in Sync",
   "icons": {
     "512": "images/icon-blue-512.png"
   },
