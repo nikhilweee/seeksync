@@ -1,9 +1,18 @@
 import websockets
 import asyncio
+import logging
 import json
 import time
 
 WebSocket = websockets.WebSocketClientProtocol
+
+logging.basicConfig(
+    format="%(asctime)s [%(name)s] %(levelname)s | %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    level=logging.INFO,
+    force=True,
+)
+logger = logging.getLogger("seekserver")
 
 
 class User:
@@ -49,7 +58,7 @@ class Server:
         if not users:
             return
         usernames = [user.username for user in users]
-        print("SEND", usernames, message)
+        logger.info(f"SEND {usernames} {message}")
         connections = [user.websocket for user in users]
         message = json.dumps(message)
         websockets.broadcast(connections, message)
@@ -69,12 +78,12 @@ class Server:
     # Parent Handlers
 
     def handle_connect(self, websocket):
-        print("connected: ", websocket)
+        logger.info(f"connected: {websocket}")
         if websocket not in self.connections:
             self.connections[websocket] = None
 
     def handle_disconnect(self, websocket):
-        print("disconnected: ", websocket)
+        logger.info(f"disconnected: {websocket}")
         if websocket not in self.connections:
             return
         roomname = self.connections[websocket]
@@ -242,20 +251,22 @@ async def echo(websocket):
         async for message in websocket:
             try:
                 message = json.loads(message)
-                print("RECV", message)
+                logger.info(f"RECV {message}")
                 server.handle_message(websocket, message)
             except json.JSONDecodeError:
                 pass
                 # mostly keepalive messages
-                # print("received keepalive", message)
+                # logger.info(f"received keepalive {message}")
     except Exception as e:
-        print("exception", e)
+        logger.info(e)
     finally:
         server.handle_disconnect(websocket)
 
 
 async def main():
-    async with websockets.serve(echo, "0.0.0.0", 5678):
+    host, port = "0.0.0.0", 5678
+    logger.info(f"Starting server on host {host} port {port}.")
+    async with websockets.serve(echo, host, port):
         await asyncio.Future()  # run forever
 
 

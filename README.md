@@ -27,6 +27,18 @@ publicly reachable IP address. You can find this script as
 `seekserver/server.py`. An easy way to run the server is to host it on any cloud
 VM provider.
 
+### Docker Compose
+
+If you wish to host the server using docker compose, just navigate to
+`seeksync/seekserver` and spin up a container:
+
+```console
+# Run this command from the seeksync/seekserver directory
+$ docker compose up -d
+```
+
+### Manual Setup
+
 The instructions assume that you are running the server on a linux machine with
 a public IP of `11.22.33.44`. A working installation of Python is required.
 
@@ -52,6 +64,13 @@ a public IP of `11.22.33.44`. A working installation of Python is required.
 4. Your clients should be able to connect to `11.22.33.44:5678`
 
 ## Extension Setup
+
+### Chrome Web Store
+
+You can install the extension from the
+[Chrome Web Store](https://chromewebstore.google.com/detail/seeksync/jlofdbpgmgeokldbfhlcihikebgmpnoa).
+
+### Download ZIP
 
 1. Download this repository. Go to https://github.com/nikhilweee/seeksync/,
    click on the green `Code` button on the top right, then click `Download ZIP`.
