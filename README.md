@@ -1,82 +1,82 @@
 # seeksync
 
-Watch Netflix in Sync
+Browser extension to watch videos in sync.
 
-## Concepts
+Seeksync lets you sync seek positions with everyone else in the room.
 
-Chrome extensions consist of different kinds of scripts, each with a different
-set of abilities.
+![Seeksync Screenshot](https://i.imgur.com/PeMSkZK.jpg)
 
-- The background script has access to most of chrome's APIs but doesn't have
-  access to the DOM.
-- The content script has access to the DOM but does not share the same
-  environment as the webpage.
-- The injected script has acceess to the DOM and shares the same environment as
-  the webpage but does not have access to chrome's APIs.
+## Getting Started
 
-Here's a table for quick reference.
+This extension is based on a client-server architecture. Besides the browser
+extension (the client), it also requires a server to facilitate communication
+between different clients. A simple websockets based python server is included
+in this repository (`seekserver/server.py`).
 
-| Script     | `document.*` | `window.*` | `chrome.*` |
-| ---------- | ------------ | ---------- | ---------- |
-| Background | No           | No         | Yes        |
-| Content    | Yes          | No         | Limited    |
-| Injected   | Yes          | Yes        | No         |
+To get started, each user needs to install the browser extension on their
+machine. However, one instance of the server can cater to multiple clients.
+Follow these steps to install the extension and setup the server.
 
-## Layout
+## Server Setup
 
-This extension needs to coordinate between different kinds of scripts. Here are
-some script files used in the extension and their types.
+The server is a simple python script that can be run on any machine with a
+publicly reachable IP address. An easy way is to host it on any cloud VM. The
+instructions assume that you are running the server on a linux machine with a
+public IP of `11.22.33.44`. A working installation of Python is required.
 
-- `sidepanel/script.js`: sidepanel
-- `scripts/websockets.js`: content
-- `scripts/netflix/inject.js`: inject
-- `scripts/netflix/content.js`: content
-- `service-worker.js`: background
+1. Create a virtual environment (optional)
 
-Here's how the entire workflow happens.
+   ```console
+   python3 -m venv .venv
+   source .venv/bin/activate
+   ```
 
-- The actual interaction with the video player happens through the injected
-  script. This script needs to communicate with the content script using
-  `window.postMessage`.
-- The content script maintains communication with the server using a `WebSocket`
-  client. It receives messages from the injected script and passes them over to
-  the websocket if required. It also receives messages from the websocket and
-  passes them on to the injected script using `window.postMessage` when
-  required.
-- The sidebar shows a UI with messages received from the server.
+2. Install dependencies
 
-## Message Formats
+   ```console
+   $ pip install websockets
+   ```
 
-Let's think about the kinds of messages that we need to send between different
-components of the extension.
+3. Start the server
 
-1. A chat message that needs to show up on the chat panel. This can either come
-   from the user when they type a message, or from the server when another user
-   types a message or a system message needs to be shown.
-2. A control message that either the client sends to the server to indicate the
-   current position, or the server sends the client to sync the player.
+   ```console
+   $ python server.py
+   ```
 
-```js
-// Client to server messages must have username and roomname
-// Only server to client user chat messages must have username and roomname
+4. Your clients should be able to connect to `11.22.33.44:5678`
 
-// Connect message from client to server
-// Sent when user presses the connect button.
-{'type': 'control', 'action': 'connect', 'roomname': 'default', 'username': 'chrome'}
+## Extension Setup
 
-// Action message from client to server.
-// Sent when user performs a play/pause action.
-{'type': 'control', 'sender': 'client', 'action': 'pause', 'url': 'url', 'time': 12345, 'roomname': 'default', 'username': 'chrome'}
+1. Download this repository. Go to https://github.com/nikhilweee/seeksync/,
+   click on the green `Code` button on the top right, then click `Download ZIP`.
+2. On Chrome, open the extensions page. Click `Three Dots` > `Extensions` ->
+   `Manage Extensions`, or go to `chrome://extensions` from the address bar.
+3. Enable developer mode. Click the switch on top right which says
+   `Developer mode`.
+4. Install the extension. Click on `Load unpacked` and navigate to the unzipped
+   download location. Select the inner `seeksync` folder.
+5. Activate the extension by clicking its icon on the toolbar. If the icon isn't
+   visible, click on the extensions button (jigsaw button) and click SeekSync.
+   You should see the sidebar open up.
+6. Click on the settings icon and enter the server address `11.22.33.44:5678`.
+   The room name can be anything as long as all users use the same room name.
+   Choose any username to identify yourself in the room.
+7. Click on the toggle right next to the settings icon. If everything goes well,
+   you should see a message saying `<username> entered the room`
+8. To start watching videos in sync, open your favourite video on your preferred
+   platform and start watching. If you face issues, try refreshing the page.
 
-// User chat message from client to server (or server to client)
-// Broadcast to all users when someone posts a chat message.
-{'type': 'chat', 'sender': 'user', 'text': 'message', 'username': 'chrome', 'roomname': 'default'}
+## Usage
 
-// System chat message (notification) from server to client
-// Notify users when another user joins, leaves, plays or pauses
-{'type': 'chat', 'sender': 'system', 'text': 'message'}
+1. To watch a video together, ask all users to connect using the same server and
+   the same room. Make sure each user sets a unique username.
+2. Whenever someone starts watching a video, a message will be sent to all other
+   users with the URL of the video. Any user can click on this URL to open the
+   video's webpage.
+3. From there, every user who is watching the same video should have
+   synchronized playback. A message appears on the chat window every time anyone
+   changes the playback state of the video.
 
-// Action message from server to client
-// This is the message that plays/pauses the video
-{'type': 'control', 'sender': 'server', 'action': 'pause', 'time': 12345}
-```
+## Documentation
+
+Additional documentation can be found [here](DOCS.md)

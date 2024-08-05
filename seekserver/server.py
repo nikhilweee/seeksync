@@ -242,7 +242,6 @@ async def echo(websocket):
         async for message in websocket:
             try:
                 message = json.loads(message)
-                print()
                 print("RECV", message)
                 server.handle_message(websocket, message)
             except json.JSONDecodeError:
@@ -256,7 +255,7 @@ async def echo(websocket):
 
 
 async def main():
-    async with websockets.serve(echo, "localhost", 8765):
+    async with websockets.serve(echo, "0.0.0.0", 5678):
         await asyncio.Future()  # run forever
 
 
