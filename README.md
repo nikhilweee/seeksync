@@ -23,7 +23,8 @@ Follow these steps to install the extension and setup the server.
 ## Server Setup
 
 The server is a simple python script that can be run on any machine with a
-publicly reachable IP address. An easy way is to host it on any cloud VM. The
+publicly reachable IP address. You can find this script as
+`seekserver/server.py`. An easy way is to host it on any cloud VM. The
 instructions assume that you are running the server on a linux machine with a
 public IP of `11.22.33.44`. A working installation of Python is required.
 
