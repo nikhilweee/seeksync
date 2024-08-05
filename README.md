@@ -4,6 +4,9 @@ Browser extension to watch videos in sync.
 
 Seeksync lets you sync seek positions with everyone else in the room.
 
+Get it from the
+[Chrome Web Store](https://chromewebstore.google.com/detail/seeksync/jlofdbpgmgeokldbfhlcihikebgmpnoa?hl=en).
+
 ![Seeksync Screenshot](https://i.imgur.com/PeMSkZK.jpg)
 
 ## Getting Started
@@ -79,4 +82,4 @@ public IP of `11.22.33.44`. A working installation of Python is required.
 
 ## Documentation
 
-Additional documentation can be found [here](DOCS.md)
+Additional documentation can be found in [DOCS.md](DOCS.md).
