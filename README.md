@@ -5,7 +5,7 @@ Browser extension to watch videos in sync.
 Seeksync lets you sync seek positions with everyone else in the room.
 
 Get it from the
-[Chrome Web Store](https://chromewebstore.google.com/detail/seeksync/jlofdbpgmgeokldbfhlcihikebgmpnoa?hl=en).
+[Chrome Web Store](https://chromewebstore.google.com/detail/seeksync/jlofdbpgmgeokldbfhlcihikebgmpnoa).
 
 ![Seeksync Screenshot](https://i.imgur.com/PeMSkZK.jpg)
 
