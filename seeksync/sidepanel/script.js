@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", function () {
    * One time actions
    */
 
-  // Load saved values from storage and populate inputs on first load
+  // Populate settings on first load
   chrome.storage.local.get(inputNames).then((storage) => {
     inputNames.forEach((name) => {
       const input = document.getElementById(name);
@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Restore messages from session storage on first load
+  // Restore messages on first load
   chrome.storage.session.get({ chatMessages: [] }).then((storage) => {
     chatMessages = storage.chatMessages;
     storage.chatMessages.forEach((message) => {
@@ -117,9 +117,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Restore connection status from session storage on first load
+  // Restore connection status on first load
   chrome.storage.session.get({ connected: false }).then((storage) => {
-    connection.textContent = storage.connected;
+    connection.checked = storage.connected;
   });
 
   // Ensure connection is established on first load
@@ -127,6 +127,9 @@ document.addEventListener("DOMContentLoaded", function () {
     type: "control",
     action: "ensureconnect",
   });
+
+  // Reset badge count on first load
+  chrome.action.setBadgeText({ text: "" });
 
   /**
    * Chrome Listeners

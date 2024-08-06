@@ -86,7 +86,7 @@ Use librsvg to convert SVG to PNG files.
 ```shell
 # run these commands from the images directory
 rsvg-convert svg/icon-blue.svg -o icon-blue-512.png -h 512 -w 512
-rsvg-convert svg/icon-green.svg -o icon-green-128.png -h 128 -w 128
+rsvg-convert svg/icon-blue.svg -o icon-blue-128.png -h 128 -w 128
 rsvg-convert svg/icon-gray.svg -o icon-gray-128.png -h 128 -w 128
 ```
 

@@ -125,9 +125,13 @@ class Server:
     def handle_control_connect(self, websocket, message):
         room, _ = self.parse_message(websocket, message)
 
-        # Broadcast join message to all users
+        # Broadcast join message to other users
 
-        all_users = room.get_all_users()
+        other_users = []
+        for user in room.get_all_users():
+            if user.websocket == websocket:
+                continue
+            other_users.append(user)
 
         message_dict = {
             "type": "chat",
@@ -136,7 +140,7 @@ class Server:
             "ts": time.time(),
         }
 
-        self.broadcast_json(message_dict, all_users)
+        self.broadcast_json(message_dict, other_users)
 
     def handle_control_play_pause(self, websocket, message):
         room, user = self.parse_message(websocket, message)

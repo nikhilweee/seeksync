@@ -1,5 +1,6 @@
 /** Configure action button to open side panel */
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
+chrome.action.setBadgeBackgroundColor({ color: "#14335D" });
 
 let ws = null;
 let chatMessages = [];
@@ -23,8 +24,8 @@ function keepAlive() {
   );
 }
 
+/** Establish a new websocket connection */
 function handleConnect() {
-  // Open a new connection
   chrome.storage.local.get("servername").then((storage) => {
     const url = `ws://${storage.servername}`;
     ws = new WebSocket(url);
@@ -37,7 +38,7 @@ function handleConnect() {
         ts: Date.now() / 1000,
       });
       keepAlive();
-      chrome.action.setIcon({ path: "images/icon-green-128.png" });
+      chrome.action.setIcon({ path: "images/icon-blue-128.png" });
       chrome.storage.session.set({ connected: true });
     };
     ws.onerror = (event) => {
@@ -66,24 +67,50 @@ function handleConnect() {
   });
 }
 
+/**  Update badge count for user messages */
+function updateBadge(message) {
+  if (message.sender === "user") {
+    chrome.storage.local.get(["username"]).then((storage) => {
+      if (message.username === storage.username) {
+        // If the message is from the current user, clear the badge
+        chrome.action.setBadgeText({ text: "" });
+      } else {
+        // If the message is from another user, increment the count
+        chrome.action.getBadgeText({}).then((text) => {
+          if (text === "") {
+            chrome.action.setBadgeText({ text: "1" });
+          } else {
+            const count = parseInt(text) + 1 + "";
+            chrome.action.setBadgeText({ text: count });
+          }
+        });
+      }
+    });
+  }
+}
+
 function websocketReceive(event) {
   const message = JSON.parse(event.data);
   console.log("websocket receive", message);
   if (message.type === "control") {
+    // Route control messages to content script
     chrome.tabs
       .query({ active: true, lastFocusedWindow: true })
       .then(([tab]) => {
         chrome.tabs.sendMessage(tab.id, message);
       });
   } else {
+    // Route chat messages to chat panel
     chatMessages.push(message);
     chrome.storage.session.set({ chatMessages: chatMessages });
     chrome.runtime.sendMessage(message);
+    updateBadge(message);
   }
 }
 
 function websocketSend(message) {
   if (ws && ws.readyState === WebSocket.OPEN) {
+    // Prepare and send message if websocket is open
     chrome.storage.local.get(["roomname", "username"]).then((storage) => {
       message.roomname = storage.roomname || "default";
       message.username = storage.username || "default";
@@ -91,6 +118,7 @@ function websocketSend(message) {
       ws.send(JSON.stringify(message));
     });
   } else {
+    // Show error message if websocket is not open
     chrome.runtime.sendMessage({
       type: "chat",
       sender: "system",
