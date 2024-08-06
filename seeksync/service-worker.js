@@ -80,7 +80,8 @@ function updateBadge(message) {
           if (text === "") {
             chrome.action.setBadgeText({ text: "1" });
           } else {
-            const count = parseInt(text) + 1 + "";
+            let count = parseInt(text) + 1;
+            count = count > 10 ? "10+" : count.toString();
             chrome.action.setBadgeText({ text: count });
           }
         });

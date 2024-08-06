@@ -134,7 +134,7 @@ div.message-ts {
   border: none;
   background-color: var(--dark-secondary);
   border-radius: 1em;
-  padding: 0.2em 0;
+  padding: 0.3em 0;
   margin-bottom: 1em;
   overflow-y: auto;
   flex-grow: 1;
