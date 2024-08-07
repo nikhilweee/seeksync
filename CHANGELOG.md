@@ -8,12 +8,17 @@ and this project adheres to
 
 ## [Unreleased]
 
-[unreleased]: https://github.com/nikhilweee/seeksync/compare/v0.1...HEAD
+[unreleased]: https://github.com/nikhilweee/seeksync/compare/v0.2...HEAD
+
+## [0.2] - 2024-08-05
+
+[0.2]: https://github.com/nikhilweee/seeksync/releases/tag/v0.1...v0.2
 
 - Change toolbar icon color to blue.
 - Fix redundant messages when user enters the room.
 - Fix sidebar toggle state on subsequent loads.
 - Add badge count on new user message.
+- Add CHANGELOG.
 
 ## [0.1] - 2024-08-05
 
