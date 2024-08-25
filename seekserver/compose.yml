@@ -1,16 +1,12 @@
 services:
   seekserver:
     container_name: seekserver
-    restart: always
     build: .
+    restart: always
     networks:
       - proxyman_default
     # ports:
-    #   - '7000:7000'
-    # interactive shell
-    # tty: true
-    # stdin_open: true
-    # command: /bin/bash
+    #   - '5678:5678'
 
 networks:
   proxyman_default:
