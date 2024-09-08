@@ -1,6 +1,7 @@
 services:
   seekserver:
     container_name: seekserver
+    image: seekserver
     build: .
     restart: always
     networks:
